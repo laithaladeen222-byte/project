@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discover Japan — 18 Destinations</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#f5f2ee;font-family:'DM Sans',sans-serif;color:#1a1a1a;}
+.site{max-width:980px;margin:40px auto;padding:0 20px 60px;}
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1);}
+.reveal.visible{opacity:1;transform:none;}
+.hero{background:linear-gradient(160deg,#1a0a0a 0%,#3d0a0a 40%,#7a1a1a 100%);padding:60px 36px 52px;position:relative;overflow:hidden;border-radius:18px;margin-bottom:48px;}
+.hero::before{content:'';position:absolute;top:-20px;right:-20px;width:320px;height:320px;background:radial-gradient(circle,rgba(220,50,50,0.22) 0%,transparent 70%);animation:pulse 4s ease-in-out infinite;}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.15);opacity:.7;}}
+.kanji-bg{position:absolute;right:32px;top:28px;font-size:140px;color:rgba(255,255,255,.05);font-family:serif;pointer-events:none;line-height:1;}
+.petals{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;}
+@keyframes fall{0%{opacity:0;transform:translateY(-20px) rotate(0deg);}10%{opacity:.7;}90%{opacity:.4;}100%{opacity:0;transform:translateY(260px) rotate(360deg);}}
+.hero-tag{font-size:11px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:rgba(255,180,150,.85);margin-bottom:16px;}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(34px,6vw,56px);color:#fff;line-height:1.15;margin-bottom:14px;}
+.hero h1 span{color:#ff8870;}
+.hero p{font-size:15px;color:rgba(255,255,255,.7);max-width:560px;line-height:1.7;margin-bottom:28px;}
+.hero-btn{display:inline-block;background:#ff4433;color:#fff;padding:12px 30px;border-radius:40px;font-size:14px;font-weight:500;text-decoration:none;}
+.stats-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:48px;}
+.stat-card{background:#fff;border:.5px solid rgba(0,0,0,.1);border-radius:14px;padding:22px;text-align:center;}
+.stat-num{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#cc2211;line-height:1;}
+.stat-lbl{font-size:12px;color:#666;margin-top:5px;}
+.sec-label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#cc3322;font-weight:500;margin-bottom:6px;}
+.sec-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#1a1a1a;margin-bottom:24px;}
+.place-card{background:#fff;border:.5px solid rgba(0,0,0,.1);border-radius:14px;overflow:hidden;margin-bottom:22px;transition:border-color .25s,box-shadow .25s,transform .25s;cursor:pointer;}
+.place-card:hover{border-color:#cc3322;transform:translateY(-3px);box-shadow:0 12px 36px rgba(180,30,20,.1);}
+.place-top{display:grid;grid-template-columns:240px 1fr;min-height:210px;}
+.place-img-wrap{position:relative;overflow:hidden;background:#231010;}
+.place-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease;}
+.place-card:hover .place-img{transform:scale(1.06);}
+.city-badge{position:absolute;top:10px;left:10px;font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;background:rgba(0,0,0,.55);color:rgba(255,255,255,.95);padding:3px 10px;border-radius:20px;}
+.place-info{padding:20px 22px;}
+.place-name{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:6px;color:#1a1a1a;}
+.place-desc{font-size:13px;color:#555;line-height:1.65;margin-bottom:12px;}
+.place-rating{display:flex;align-items:center;gap:6px;font-size:13px;margin-bottom:4px;}
+.stars{color:#f5a623;letter-spacing:1px;}
+.rating-num{color:#888;font-size:12px;}
+.place-hours{font-size:11px;color:#aaa;}
+.place-actions{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;}
+.mini-btn{display:inline-block;background:#111;color:#fff;padding:8px 12px;border-radius:999px;font-size:12px;text-decoration:none;}
+.mini-btn.secondary{background:#f3f0eb;color:#333;border:1px solid rgba(0,0,0,.08);}
+.book-section{background:#fff;border:.5px solid rgba(0,0,0,.1);border-radius:14px;padding:28px;margin-top:40px;margin-bottom:40px;}
+.book-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:20px;}
+.field-group{display:flex;flex-direction:column;gap:6px;}
+.field-label{font-size:11px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:#888;}
+.field-group select,.field-group input{padding:10px 12px;border-radius:8px;border:.5px solid rgba(0,0,0,.15);background:#faf9f7;color:#1a1a1a;font-size:13px;font-family:'DM Sans',sans-serif;width:100%;}
+.book-btn{background:#cc2211;color:#fff;padding:12px 32px;border-radius:40px;font-size:13px;font-weight:500;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;}
+.confirm-msg{display:none;font-size:13px;color:#1a7a3a;margin-top:14px;font-weight:500;}
+.footer-bar{border-top:.5px solid rgba(0,0,0,.08);padding-top:20px;padding-bottom:10px;text-align:center;font-size:12px;color:#aaa;margin-top:8px;}
+.note{background:#fff8e7;border:1px solid #f0d999;color:#7a5200;padding:14px 16px;border-radius:12px;margin-bottom:24px;font-size:13px;line-height:1.6;}
+@media(max-width:700px){
+  .place-top{grid-template-columns:1fr;}
+  .place-img-wrap{height:210px;}
+  .stats-bar{grid-template-columns:1fr;}
+  .site{padding:0 12px 60px;}
+  .hero{padding:44px 22px 40px;}
+}
+</style>
+</head>
+<body>
+<div class="site">
+  <div class="hero">
+    <div class="petals" id="petals"></div>
+    <div class="kanji-bg">日本</div>
+    <div class="hero-tag">✦ Discover Japan</div>
+    <h1>Journey into<br><span>18 amazing places<br>across Japan</span></h1>
+    <p>Click any destination card to open more about it, or book nearby stays instantly.</p>
+    <a class="hero-btn" href="#places">Explore destinations →</a>
+  </div>
+<div class="stats-bar">
+    <div class="stat-card reveal"><div class="stat-num" data-target="18">0</div><div class="stat-lbl">Destinations</div></div>
+    <div class="stat-card reveal"><div class="stat-num" data-target="18">0</div><div class="stat-lbl">Visitors a year</div></div>
+    <div class="stat-card reveal"><div class="stat-num" data-target="500" data-suffix="k+">0</div><div class="stat-lbl">Combined ratings</div></div>
+  </div>
+
+  <div id="places">
+    <div class="sec-label reveal">✦ Top destinations</div>
+    <div class="sec-title reveal">Where to go</div>
+    
+    <div class="place-card reveal" onclick="openPlace('Tokyo Tower','https://www.google.com/search?q=Tokyo+Tower')">
+      <div class="place-top">
+        <div class="place-img-wrap">
+          <img class="place-img" src="https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Tokyo Tower" onerror="this.onerror=null;this.src=`data:image/svg+xml;utf8,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;1200&#x27; height=&#x27;800&#x27;&gt;&lt;defs&gt;&lt;linearGradient id=&#x27;g&#x27; x1=&#x27;0&#x27; y1=&#x27;0&#x27; x2=&#x27;1&#x27; y2=&#x27;1&#x27;&gt;&lt;stop stop-color=&#x27;%237a1a1a&#x27; offset=&#x27;0&#x27;/&gt;&lt;stop stop-color=&#x27;%231a0a0a&#x27; offset=&#x27;1&#x27;/&gt;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;rect width=&#x27;100%&#x27; height=&#x27;100%&#x27; fill=&#x27;url(%23g)&#x27;/&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;44%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;white&#x27; font-size=&#x27;42&#x27; font-family=&#x27;Arial&#x27;&gt;Tokyo Tower&lt;/text&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;56%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;%23ffd7cf&#x27; font-size=&#x27;24&#x27; font-family=&#x27;Arial&#x27;&gt;Tokyo, Japan&lt;/text&gt;&lt;/svg&gt;`;">
+          <span class="city-badge">Tokyo</span>
+        </div>
+        <div class="place-info">
+          <div class="place-name">Tokyo Tower</div>
+          <div class="place-desc">Japan’s iconic red-and-white landmark with amazing skyline views, especially at sunset.</div>
+          <div class="place-rating"><span class="stars">★★★★★</span><span class="rating-num">4.5 · 95,000+ reviews</span></div>
+          <div class="place-hours">Click anywhere on this card to open the place</div>
+          <div class="place-actions">
+            <a class="mini-btn" href="https://www.google.com/search?q=Tokyo+Tower" target="_blank" onclick="event.stopPropagation()">Open place</a>
+            <a class="mini-btn secondary" href="https://www.booking.com/searchresults.html?ss=Tokyo%20Japan" target="_blank" onclick="event.stopPropagation()">Book nearby</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="place-card reveal" onclick="openPlace('Tokyo Skytree','https://www.google.com/search?q=Tokyo+Skytree')">
+      <div class="place-top">
+        <div class="place-img-wrap">
+          <img class="place-img" src="https://images.unsplash.com/photo-1513407030348-c983a97b98d8?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Tokyo Skytree" onerror="this.onerror=null;this.src=`data:image/svg+xml;utf8,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;1200&#x27; height=&#x27;800&#x27;&gt;&lt;defs&gt;&lt;linearGradient id=&#x27;g&#x27; x1=&#x27;0&#x27; y1=&#x27;0&#x27; x2=&#x27;1&#x27; y2=&#x27;1&#x27;&gt;&lt;stop stop-color=&#x27;%237a1a1a&#x27; offset=&#x27;0&#x27;/&gt;&lt;stop stop-color=&#x27;%231a0a0a&#x27; offset=&#x27;1&#x27;/&gt;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;rect width=&#x27;100%&#x27; height=&#x27;100%&#x27; fill=&#x27;url(%23g)&#x27;/&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;44%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;white&#x27; font-size=&#x27;42&#x27; font-family=&#x27;Arial&#x27;&gt;Tokyo Skytree&lt;/text&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;56%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;%23ffd7cf&#x27; font-size=&#x27;24&#x27; font-family=&#x27;Arial&#x27;&gt;Tokyo, Japan&lt;/text&gt;&lt;/svg&gt;`;">
+          <span class="city-badge">Tokyo</span>
+        </div>
+        <div class="place-info">
+          <div class="place-name">Tokyo Skytree</div>
+          <div class="place-desc">A super-tall tower with sweeping city panoramas and beautiful nighttime views.</div>
+          <div class="place-rating"><span class="stars">★★★★★</span><span class="rating-num">4.4 · 112,000+ reviews</span></div>
+          <div class="place-hours">Click anywhere on this card to open the place</div>
+          <div class="place-actions">
+            <a class="mini-btn" href="https://www.google.com/search?q=Tokyo+Skytree" target="_blank" onclick="event.stopPropagation()">Open place</a>
+            <a class="mini-btn secondary" href="https://www.booking.com/searchresults.html?ss=Tokyo%20Japan" target="_blank" onclick="event.stopPropagation()">Book nearby</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="place-card reveal" onclick="openPlace('Senso-ji Temple','https://www.google.com/search?q=Senso-ji+Temple')">
+      <div class="place-top">
+        <div class="place-img-wrap">
+          <img class="place-img" src="https://images.unsplash.com/photo-1526481280695-3c4691d52f7d?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Senso-ji Temple" onerror="this.onerror=null;this.src=`data:image/svg+xml;utf8,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;1200&#x27; height=&#x27;800&#x27;&gt;&lt;defs&gt;&lt;linearGradient id=&#x27;g&#x27; x1=&#x27;0&#x27; y1=&#x27;0&#x27; x2=&#x27;1&#x27; y2=&#x27;1&#x27;&gt;&lt;stop stop-color=&#x27;%237a1a1a&#x27; offset=&#x27;0&#x27;/&gt;&lt;stop stop-color=&#x27;%231a0a0a&#x27; offset=&#x27;1&#x27;/&gt;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;rect width=&#x27;100%&#x27; height=&#x27;100%&#x27; fill=&#x27;url(%23g)&#x27;/&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;44%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;white&#x27; font-size=&#x27;42&#x27; font-family=&#x27;Arial&#x27;&gt;Senso-ji Temple&lt;/text&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;56%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;%23ffd7cf&#x27; font-size=&#x27;24&#x27; font-family=&#x27;Arial&#x27;&gt;Tokyo, Japan&lt;/text&gt;&lt;/svg&gt;`;">
+          <span class="city-badge">Tokyo</span>
+        </div>
+        <div class="place-info">
+          <div class="place-name">Senso-ji Temple</div>
+          <div class="place-desc">Tokyo’s oldest famous temple with a giant lantern gate and lively Nakamise street.</div>
+          <div class="place-rating"><span class="stars">★★★★★</span><span class="rating-num">4.5 · 93,000+ reviews</span></div>
+          <div class="place-hours">Click anywhere on this card to open the place</div>
+          <div class="place-actions">
+            <a class="mini-btn" href="https://www.google.com/search?q=Senso-ji+Temple" target="_blank" onclick="event.stopPropagation()">Open place</a>
+            <a class="mini-btn secondary" href="https://www.booking.com/searchresults.html?ss=Asakusa%20Tokyo" target="_blank" onclick="event.stopPropagation()">Book nearby</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="place-card reveal" onclick="openPlace('Shibuya Crossing','https://www.google.com/search?q=Shibuya+Crossing')">
+      <div class="place-top">
+        <div class="place-img-wrap">
+          <img class="place-img" src="https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Shibuya Crossing" onerror="this.onerror=null;this.src=`data:image/svg+xml;utf8,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;1200&#x27; height=&#x27;800&#x27;&gt;&lt;defs&gt;&lt;linearGradient id=&#x27;g&#x27; x1=&#x27;0&#x27; y1=&#x27;0&#x27; x2=&#x27;1&#x27; y2=&#x27;1&#x27;&gt;&lt;stop stop-color=&#x27;%237a1a1a&#x27; offset=&#x27;0&#x27;/&gt;&lt;stop stop-color=&#x27;%231a0a0a&#x27; offset=&#x27;1&#x27;/&gt;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;rect width=&#x27;100%&#x27; height=&#x27;100%&#x27; fill=&#x27;url(%23g)&#x27;/&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;44%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;white&#x27; font-size=&#x27;42&#x27; font-family=&#x27;Arial&#x27;&gt;Shibuya Crossing&lt;/text&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;56%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;%23ffd7cf&#x27; font-size=&#x27;24&#x27; font-family=&#x27;Arial&#x27;&gt;Tokyo, Japan&lt;/text&gt;&lt;/svg&gt;`;">
+          <span class="city-badge">Tokyo</span>
+        </div>
+        <div class="place-info">
+          <div class="place-name">Shibuya Crossing</div>
+          <div class="place-desc">The world-famous crossing surrounded by giant screens, shopping, and nonstop energy.</div>
+          <div class="place-rating"><span class="stars">★★★★★</span><span class="rating-num">4.6 · 58,000+ reviews</span></div>
+          <div class="place-hours">Click anywhere on this card to open the place</div>
+          <div class="place-actions">
+            <a class="mini-btn" href="https://www.google.com/search?q=Shibuya+Crossing" target="_blank" onclick="event.stopPropagation()">Open place</a>
+            <a class="mini-btn secondary" href="https://www.booking.com/searchresults.html?ss=Shibuya%20Tokyo" target="_blank" onclick="event.stopPropagation()">Book nearby</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="place-card reveal" onclick="openPlace('Meiji Shrine','https://www.google.com/search?q=Meiji+Shrine')">
+      <div class="place-top">
+        <div class="place-img-wrap">
+          <img class="place-img" src="https://images.unsplash.com/photo-1578469645742-46cae010e5d4?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Meiji Shrine" onerror="this.onerror=null;this.src=`data:image/svg+xml;utf8,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;1200&#x27; height=&#x27;800&#x27;&gt;&lt;defs&gt;&lt;linearGradient id=&#x27;g&#x27; x1=&#x27;0&#x27; y1=&#x27;0&#x27; x2=&#x27;1&#x27; y2=&#x27;1&#x27;&gt;&lt;stop stop-color=&#x27;%237a1a1a&#x27; offset=&#x27;0&#x27;/&gt;&lt;stop stop-color=&#x27;%231a0a0a&#x27; offset=&#x27;1&#x27;/&gt;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;rect width=&#x27;100%&#x27; height=&#x27;100%&#x27; fill=&#x27;url(%23g)&#x27;/&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;44%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;white&#x27; font-size=&#x27;42&#x27; font-family=&#x27;Arial&#x27;&gt;Meiji Shrine&lt;/text&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;56%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;%23ffd7cf&#x27; font-size=&#x27;24&#x27; font-family=&#x27;Arial&#x27;&gt;Tokyo, Japan&lt;/text&gt;&lt;/svg&gt;`;">
+          <span class="city-badge">Tokyo</span>
+        </div>
+        <div class="place-info">
+          <div class="place-name">Meiji Shrine</div>
+          <div class="place-desc">A peaceful forest shrine in the middle of Tokyo, perfect for a calm escape.</div>
+          <div class="place-rating"><span class="stars">★★★★★</span><span class="rating-num">4.6 · 42,000+ reviews</span></div>
+          <div class="place-hours">Click anywhere on this card to open the place</div>
+          <div class="place-actions">
+            <a class="mini-btn" href="https://www.google.com/search?q=Meiji+Shrine" target="_blank" onclick="event.stopPropagation()">Open place</a>
+            <a class="mini-btn secondary" href="https://www.booking.com/searchresults.html?ss=Harajuku%20Tokyo" target="_blank" onclick="event.stopPropagation()">Book nearby</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="place-card reveal" onclick="openPlace('Fushimi Inari Taisha','https://www.google.com/search?q=Fushimi+Inari+Taisha')">
+      <div class="place-top">
+        <div class="place-img-wrap">
+          <img class="place-img" src="https://images.unsplash.com/photo-1492571350019-22de08371fd3?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Fushimi Inari Taisha" onerror="this.onerror=null;this.src=`data:image/svg+xml;utf8,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;1200&#x27; height=&#x27;800&#x27;&gt;&lt;defs&gt;&lt;linearGradient id=&#x27;g&#x27; x1=&#x27;0&#x27; y1=&#x27;0&#x27; x2=&#x27;1&#x27; y2=&#x27;1&#x27;&gt;&lt;stop stop-color=&#x27;%237a1a1a&#x27; offset=&#x27;0&#x27;/&gt;&lt;stop stop-color=&#x27;%231a0a0a&#x27; offset=&#x27;1&#x27;/&gt;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;rect width=&#x27;100%&#x27; height=&#x27;100%&#x27; fill=&#x27;url(%23g)&#x27;/&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;44%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;white&#x27; font-size=&#x27;42&#x27; font-family=&#x27;Arial&#x27;&gt;Fushimi Inari Taisha&lt;/text&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;56%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;%23ffd7cf&#x27; font-size=&#x27;24&#x27; font-family=&#x27;Arial&#x27;&gt;Kyoto, Japan&lt;/text&gt;&lt;/svg&gt;`;">
+          <span class="city-badge">Kyoto</span>
+        </div>
+        <div class="place-info">
+          <div class="place-name">Fushimi Inari Taisha</div>
+          <div class="place-desc">A mountain trail covered with thousands of bright red torii gates.</div>
+          <div class="place-rating"><span class="stars">★★★★★</span><span class="rating-num">4.6 · 86,000+ reviews</span></div>
+          <div class="place-hours">Click anywhere on this card to open the place</div>
+          <div class="place-actions">
+            <a class="mini-btn" href="https://www.google.com/search?q=Fushimi+Inari+Taisha" target="_blank" onclick="event.stopPropagation()">Open place</a>
+            <a class="mini-btn secondary" href="https://www.booking.com/searchresults.html?ss=Kyoto%20Japan" target="_blank" onclick="event.stopPropagation()">Book nearby</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="place-card reveal" onclick="openPlace('Kiyomizu-dera','https://www.google.com/search?q=Kiyomizu-dera')">
+      <div class="place-top">
+        <div class="place-img-wrap">
+          <img class="place-img" src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Kiyomizu-dera" onerror="this.onerror=null;this.src=`data:image/svg+xml;utf8,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;1200&#x27; height=&#x27;800&#x27;&gt;&lt;defs&gt;&lt;linearGradient id=&#x27;g&#x27; x1=&#x27;0&#x27; y1=&#x27;0&#x27; x2=&#x27;1&#x27; y2=&#x27;1&#x27;&gt;&lt;stop stop-color=&#x27;%237a1a1a&#x27; offset=&#x27;0&#x27;/&gt;&lt;stop stop-color=&#x27;%231a0a0a&#x27; offset=&#x27;1&#x27;/&gt;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;rect width=&#x27;100%&#x27; height=&#x27;100%&#x27; fill=&#x27;url(%23g)&#x27;/&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;44%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;white&#x27; font-size=&#x27;42&#x27; font-family=&#x27;Arial&#x27;&gt;Kiyomizu-dera&lt;/text&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;56%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;%23ffd7cf&#x27; font-size=&#x27;24&#x27; font-family=&#x27;Arial&#x27;&gt;Kyoto, Japan&lt;/text&gt;&lt;/svg&gt;`;">
+          <span class="city-badge">Kyoto</span>
+        </div>
+        <div class="place-info">
+          <div class="place-name">Kiyomizu-dera</div>
+          <div class="place-desc">A historic hilltop temple with one of Kyoto’s most famous panoramic views.</div>
+          <div class="place-rating"><span class="stars">★★★★★</span><span class="rating-num">4.6 · 68,000+ reviews</span></div>
+          <div class="place-hours">Click anywhere on this card to open the place</div>
+          <div class="place-actions">
+            <a class="mini-btn" href="https://www.google.com/search?q=Kiyomizu-dera" target="_blank" onclick="event.stopPropagation()">Open place</a>
+            <a class="mini-btn secondary" href="https://www.booking.com/searchresults.html?ss=Kyoto%20Japan" target="_blank" onclick="event.stopPropagation()">Book nearby</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="place-card reveal" onclick="openPlace('Arashiyama Bamboo Grove','https://www.google.com/search?q=Arashiyama+Bamboo+Grove')">
+      <div class="place-top">
+        <div class="place-img-wrap">
+          <img class="place-img" src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Arashiyama Bamboo Grove" onerror="this.onerror=null;this.src=`data:image/svg+xml;utf8,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;1200&#x27; height=&#x27;800&#x27;&gt;&lt;defs&gt;&lt;linearGradient id=&#x27;g&#x27; x1=&#x27;0&#x27; y1=&#x27;0&#x27; x2=&#x27;1&#x27; y2=&#x27;1&#x27;&gt;&lt;stop stop-color=&#x27;%237a1a1a&#x27; offset=&#x27;0&#x27;/&gt;&lt;stop stop-color=&#x27;%231a0a0a&#x27; offset=&#x27;1&#x27;/&gt;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;rect width=&#x27;100%&#x27; height=&#x27;100%&#x27; fill=&#x27;url(%23g)&#x27;/&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;44%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;white&#x27; font-size=&#x27;42&#x27; font-family=&#x27;Arial&#x27;&gt;Arashiyama Bamboo Grove&lt;/text&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;56%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;%23ffd7cf&#x27; font-size=&#x27;24&#x27; font-family=&#x27;Arial&#x27;&gt;Kyoto, Japan&lt;/text&gt;&lt;/svg&gt;`;">
+          <span class="city-badge">Kyoto</span>
+        </div>
+        <div class="place-info">
+          <div class="place-name">Arashiyama Bamboo Grove</div>
+          <div class="place-desc">A magical bamboo pathway that feels calm, cinematic, and uniquely Japanese.</div>
+          <div class="place-rating"><span class="stars">★★★★★</span><span class="rating-num">4.4 · 51,000+ reviews</span></div>
+          <div class="place-hours">Click anywhere on this card to open the place</div>
+          <div class="place-actions">
+            <a class="mini-btn" href="https://www.google.com/search?q=Arashiyama+Bamboo+Grove" target="_blank" onclick="event.stopPropagation()">Open place</a>
+            <a class="mini-btn secondary" href="https://www.booking.com/searchresults.html?ss=Arashiyama%20Kyoto" target="_blank" onclick="event.stopPropagation()">Book nearby</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="place-card reveal" onclick="openPlace('Kinkaku-ji','https://www.google.com/search?q=Kinkaku-ji')">
+      <div class="place-top">
+        <div class="place-img-wrap">
+          <img class="place-img" src="https://images.unsplash.com/photo-1491884662610-dfcd28f30cfb?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Kinkaku-ji" onerror="this.onerror=null;this.src=`data:image/svg+xml;utf8,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;1200&#x27; height=&#x27;800&#x27;&gt;&lt;defs&gt;&lt;linearGradient id=&#x27;g&#x27; x1=&#x27;0&#x27; y1=&#x27;0&#x27; x2=&#x27;1&#x27; y2=&#x27;1&#x27;&gt;&lt;stop stop-color=&#x27;%237a1a1a&#x27; offset=&#x27;0&#x27;/&gt;&lt;stop stop-color=&#x27;%231a0a0a&#x27; offset=&#x27;1&#x27;/&gt;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;rect width=&#x27;100%&#x27; height=&#x27;100%&#x27; fill=&#x27;url(%23g)&#x27;/&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;44%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;white&#x27; font-size=&#x27;42&#x27; font-family=&#x27;Arial&#x27;&gt;Kinkaku-ji&lt;/text&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;56%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;%23ffd7cf&#x27; font-size=&#x27;24&#x27; font-family=&#x27;Arial&#x27;&gt;Kyoto, Japan&lt;/text&gt;&lt;/svg&gt;`;">
+          <span class="city-badge">Kyoto</span>
+        </div>
+        <div class="place-info">
+          <div class="place-name">Kinkaku-ji</div>
+          <div class="place-desc">The Golden Pavilion, one of Kyoto’s most photogenic and elegant landmarks.</div>
+          <div class="place-rating"><span class="stars">★★★★★</span><span class="rating-num">4.5 · 49,000+ reviews</span></div>
+          <div class="place-hours">Click anywhere on this card to open the place</div>
+          <div class="place-actions">
+            <a class="mini-btn" href="https://www.google.com/search?q=Kinkaku-ji" target="_blank" onclick="event.stopPropagation()">Open place</a>
+            <a class="mini-btn secondary" href="https://www.booking.com/searchresults.html?ss=Kyoto%20Japan" target="_blank" onclick="event.stopPropagation()">Book nearby</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="place-card reveal" onclick="openPlace('Gion District','https://www.google.com/search?q=Gion+District+Kyoto')">
+      <div class="place-top">
+        <div class="place-img-wrap">
+          <img class="place-img" src="https://images.unsplash.com/photo-1526481280695-3c4691d52f7d?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Gion District" onerror="this.onerror=null;this.src=`data:image/svg+xml;utf8,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;1200&#x27; height=&#x27;800&#x27;&gt;&lt;defs&gt;&lt;linearGradient id=&#x27;g&#x27; x1=&#x27;0&#x27; y1=&#x27;0&#x27; x2=&#x27;1&#x27; y2=&#x27;1&#x27;&gt;&lt;stop stop-color=&#x27;%237a1a1a&#x27; offset=&#x27;0&#x27;/&gt;&lt;stop stop-color=&#x27;%231a0a0a&#x27; offset=&#x27;1&#x27;/&gt;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;rect width=&#x27;100%&#x27; height=&#x27;100%&#x27; fill=&#x27;url(%23g)&#x27;/&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;44%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;white&#x27; font-size=&#x27;42&#x27; font-family=&#x27;Arial&#x27;&gt;Gion District&lt;/text&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;56%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;%23ffd7cf&#x27; font-size=&#x27;24&#x27; font-family=&#x27;Arial&#x27;&gt;Kyoto, Japan&lt;/text&gt;&lt;/svg&gt;`;">
+          <span class="city-badge">Kyoto</span>
+        </div>
+        <div class="place-info">
+          <div class="place-name">Gion District</div>
+          <div class="place-desc">Traditional streets, wooden buildings, tea houses, and old Kyoto atmosphere.</div>
+          <div class="place-rating"><span class="stars">★★★★★</span><span class="rating-num">4.4 · 26,000+ reviews</span></div>
+          <div class="place-hours">Click anywhere on this card to open the place</div>
+          <div class="place-actions">
+            <a class="mini-btn" href="https://www.google.com/search?q=Gion+District+Kyoto" target="_blank" onclick="event.stopPropagation()">Open place</a>
+            <a class="mini-btn secondary" href="https://www.booking.com/searchresults.html?ss=Gion%20Kyoto" target="_blank" onclick="event.stopPropagation()">Book nearby</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="place-card reveal" onclick="openPlace('Dotonbori','https://www.google.com/search?q=Dotonbori+Osaka')">
+      <div class="place-top">
+        <div class="place-img-wrap">
+          <img class="place-img" src="https://images.unsplash.com/photo-1590559899731-a382839e5549?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Dotonbori" onerror="this.onerror=null;this.src=`data:image/svg+xml;utf8,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;1200&#x27; height=&#x27;800&#x27;&gt;&lt;defs&gt;&lt;linearGradient id=&#x27;g&#x27; x1=&#x27;0&#x27; y1=&#x27;0&#x27; x2=&#x27;1&#x27; y2=&#x27;1&#x27;&gt;&lt;stop stop-color=&#x27;%237a1a1a&#x27; offset=&#x27;0&#x27;/&gt;&lt;stop stop-color=&#x27;%231a0a0a&#x27; offset=&#x27;1&#x27;/&gt;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;rect width=&#x27;100%&#x27; height=&#x27;100%&#x27; fill=&#x27;url(%23g)&#x27;/&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;44%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;white&#x27; font-size=&#x27;42&#x27; font-family=&#x27;Arial&#x27;&gt;Dotonbori&lt;/text&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;56%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;%23ffd7cf&#x27; font-size=&#x27;24&#x27; font-family=&#x27;Arial&#x27;&gt;Osaka, Japan&lt;/text&gt;&lt;/svg&gt;`;">
+          <span class="city-badge">Osaka</span>
+        </div>
+        <div class="place-info">
+          <div class="place-name">Dotonbori</div>
+          <div class="place-desc">Osaka’s neon heart, famous for street food, canal views, and giant signboards.</div>
+          <div class="place-rating"><span class="stars">★★★★★</span><span class="rating-num">4.5 · 74,000+ reviews</span></div>
+          <div class="place-hours">Click anywhere on this card to open the place</div>
+          <div class="place-actions">
+            <a class="mini-btn" href="https://www.google.com/search?q=Dotonbori+Osaka" target="_blank" onclick="event.stopPropagation()">Open place</a>
+            <a class="mini-btn secondary" href="https://www.booking.com/searchresults.html?ss=Osaka%20Japan" target="_blank" onclick="event.stopPropagation()">Book nearby</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="place-card reveal" onclick="openPlace('Osaka Castle','https://www.google.com/search?q=Osaka+Castle')">
+      <div class="place-top">
+        <div class="place-img-wrap">
+          <img class="place-img" src="https://images.unsplash.com/photo-1610375461369-d613b564f4f1?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Osaka Castle" onerror="this.onerror=null;this.src=`data:image/svg+xml;utf8,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;1200&#x27; height=&#x27;800&#x27;&gt;&lt;defs&gt;&lt;linearGradient id=&#x27;g&#x27; x1=&#x27;0&#x27; y1=&#x27;0&#x27; x2=&#x27;1&#x27; y2=&#x27;1&#x27;&gt;&lt;stop stop-color=&#x27;%237a1a1a&#x27; offset=&#x27;0&#x27;/&gt;&lt;stop stop-color=&#x27;%231a0a0a&#x27; offset=&#x27;1&#x27;/&gt;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;rect width=&#x27;100%&#x27; height=&#x27;100%&#x27; fill=&#x27;url(%23g)&#x27;/&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;44%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;white&#x27; font-size=&#x27;42&#x27; font-family=&#x27;Arial&#x27;&gt;Osaka Castle&lt;/text&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;56%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;%23ffd7cf&#x27; font-size=&#x27;24&#x27; font-family=&#x27;Arial&#x27;&gt;Osaka, Japan&lt;/text&gt;&lt;/svg&gt;`;">
+          <span class="city-badge">Osaka</span>
+        </div>
+        <div class="place-info">
+          <div class="place-name">Osaka Castle</div>
+          <div class="place-desc">A beautiful castle surrounded by gardens, moats, and seasonal cherry blossoms.</div>
+          <div class="place-rating"><span class="stars">★★★★★</span><span class="rating-num">4.5 · 83,000+ reviews</span></div>
+          <div class="place-hours">Click anywhere on this card to open the place</div>
+          <div class="place-actions">
+            <a class="mini-btn" href="https://www.google.com/search?q=Osaka+Castle" target="_blank" onclick="event.stopPropagation()">Open place</a>
+            <a class="mini-btn secondary" href="https://www.booking.com/searchresults.html?ss=Osaka%20Japan" target="_blank" onclick="event.stopPropagation()">Book nearby</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="place-card reveal" onclick="openPlace('Universal Studios Japan','https://www.google.com/search?q=Universal+Studios+Japan')">
+      <div class="place-top">
+        <div class="place-img-wrap">
+          <img class="place-img" src="https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Universal Studios Japan" onerror="this.onerror=null;this.src=`data:image/svg+xml;utf8,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;1200&#x27; height=&#x27;800&#x27;&gt;&lt;defs&gt;&lt;linearGradient id=&#x27;g&#x27; x1=&#x27;0&#x27; y1=&#x27;0&#x27; x2=&#x27;1&#x27; y2=&#x27;1&#x27;&gt;&lt;stop stop-color=&#x27;%237a1a1a&#x27; offset=&#x27;0&#x27;/&gt;&lt;stop stop-color=&#x27;%231a0a0a&#x27; offset=&#x27;1&#x27;/&gt;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;rect width=&#x27;100%&#x27; height=&#x27;100%&#x27; fill=&#x27;url(%23g)&#x27;/&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;44%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;white&#x27; font-size=&#x27;42&#x27; font-family=&#x27;Arial&#x27;&gt;Universal Studios Japan&lt;/text&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;56%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;%23ffd7cf&#x27; font-size=&#x27;24&#x27; font-family=&#x27;Arial&#x27;&gt;Osaka, Japan&lt;/text&gt;&lt;/svg&gt;`;">
+          <span class="city-badge">Osaka</span>
+        </div>
+        <div class="place-info">
+          <div class="place-name">Universal Studios Japan</div>
+          <div class="place-desc">Huge theme park with rides, shows, and immersive movie worlds.</div>
+          <div class="place-rating"><span class="stars">★★★★★</span><span class="rating-num">4.5 · 127,000+ reviews</span></div>
+          <div class="place-hours">Click anywhere on this card to open the place</div>
+          <div class="place-actions">
+            <a class="mini-btn" href="https://www.google.com/search?q=Universal+Studios+Japan" target="_blank" onclick="event.stopPropagation()">Open place</a>
+            <a class="mini-btn secondary" href="https://www.booking.com/searchresults.html?ss=Osaka%20Japan" target="_blank" onclick="event.stopPropagation()">Book nearby</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="place-card reveal" onclick="openPlace('Mount Fuji','https://www.google.com/search?q=Mount+Fuji')">
+      <div class="place-top">
+        <div class="place-img-wrap">
+          <img class="place-img" src="https://images.unsplash.com/photo-1570459027562-4a916cc6113f?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Mount Fuji" onerror="this.onerror=null;this.src=`data:image/svg+xml;utf8,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;1200&#x27; height=&#x27;800&#x27;&gt;&lt;defs&gt;&lt;linearGradient id=&#x27;g&#x27; x1=&#x27;0&#x27; y1=&#x27;0&#x27; x2=&#x27;1&#x27; y2=&#x27;1&#x27;&gt;&lt;stop stop-color=&#x27;%237a1a1a&#x27; offset=&#x27;0&#x27;/&gt;&lt;stop stop-color=&#x27;%231a0a0a&#x27; offset=&#x27;1&#x27;/&gt;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;rect width=&#x27;100%&#x27; height=&#x27;100%&#x27; fill=&#x27;url(%23g)&#x27;/&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;44%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;white&#x27; font-size=&#x27;42&#x27; font-family=&#x27;Arial&#x27;&gt;Mount Fuji&lt;/text&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;56%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;%23ffd7cf&#x27; font-size=&#x27;24&#x27; font-family=&#x27;Arial&#x27;&gt;Shizuoka, Japan&lt;/text&gt;&lt;/svg&gt;`;">
+          <span class="city-badge">Shizuoka</span>
+        </div>
+        <div class="place-info">
+          <div class="place-name">Mount Fuji</div>
+          <div class="place-desc">Japan’s most iconic mountain and one of the most recognizable views in the world.</div>
+          <div class="place-rating"><span class="stars">★★★★★</span><span class="rating-num">4.6 · 12,000+ reviews</span></div>
+          <div class="place-hours">Click anywhere on this card to open the place</div>
+          <div class="place-actions">
+            <a class="mini-btn" href="https://www.google.com/search?q=Mount+Fuji" target="_blank" onclick="event.stopPropagation()">Open place</a>
+            <a class="mini-btn secondary" href="https://www.booking.com/searchresults.html?ss=Mount%20Fuji%20Japan" target="_blank" onclick="event.stopPropagation()">Book nearby</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="place-card reveal" onclick="openPlace('Lake Kawaguchi','https://www.google.com/search?q=Lake+Kawaguchi')">
+      <div class="place-top">
+        <div class="place-img-wrap">
+          <img class="place-img" src="https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Lake Kawaguchi" onerror="this.onerror=null;this.src=`data:image/svg+xml;utf8,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;1200&#x27; height=&#x27;800&#x27;&gt;&lt;defs&gt;&lt;linearGradient id=&#x27;g&#x27; x1=&#x27;0&#x27; y1=&#x27;0&#x27; x2=&#x27;1&#x27; y2=&#x27;1&#x27;&gt;&lt;stop stop-color=&#x27;%237a1a1a&#x27; offset=&#x27;0&#x27;/&gt;&lt;stop stop-color=&#x27;%231a0a0a&#x27; offset=&#x27;1&#x27;/&gt;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;rect width=&#x27;100%&#x27; height=&#x27;100%&#x27; fill=&#x27;url(%23g)&#x27;/&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;44%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;white&#x27; font-size=&#x27;42&#x27; font-family=&#x27;Arial&#x27;&gt;Lake Kawaguchi&lt;/text&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;56%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;%23ffd7cf&#x27; font-size=&#x27;24&#x27; font-family=&#x27;Arial&#x27;&gt;Yamanashi, Japan&lt;/text&gt;&lt;/svg&gt;`;">
+          <span class="city-badge">Yamanashi</span>
+        </div>
+        <div class="place-info">
+          <div class="place-name">Lake Kawaguchi</div>
+          <div class="place-desc">A scenic lake with stunning reflections of Mount Fuji on clear days.</div>
+          <div class="place-rating"><span class="stars">★★★★★</span><span class="rating-num">4.6 · 8,000+ reviews</span></div>
+          <div class="place-hours">Click anywhere on this card to open the place</div>
+          <div class="place-actions">
+            <a class="mini-btn" href="https://www.google.com/search?q=Lake+Kawaguchi" target="_blank" onclick="event.stopPropagation()">Open place</a>
+            <a class="mini-btn secondary" href="https://www.booking.com/searchresults.html?ss=Lake%20Kawaguchi%20Japan" target="_blank" onclick="event.stopPropagation()">Book nearby</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="place-card reveal" onclick="openPlace('Nara Park','https://www.google.com/search?q=Nara+Park')">
+      <div class="place-top">
+        <div class="place-img-wrap">
+          <img class="place-img" src="https://images.unsplash.com/photo-1590253230532-a67f6bc61c9e?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Nara Park" onerror="this.onerror=null;this.src=`data:image/svg+xml;utf8,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;1200&#x27; height=&#x27;800&#x27;&gt;&lt;defs&gt;&lt;linearGradient id=&#x27;g&#x27; x1=&#x27;0&#x27; y1=&#x27;0&#x27; x2=&#x27;1&#x27; y2=&#x27;1&#x27;&gt;&lt;stop stop-color=&#x27;%237a1a1a&#x27; offset=&#x27;0&#x27;/&gt;&lt;stop stop-color=&#x27;%231a0a0a&#x27; offset=&#x27;1&#x27;/&gt;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;rect width=&#x27;100%&#x27; height=&#x27;100%&#x27; fill=&#x27;url(%23g)&#x27;/&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;44%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;white&#x27; font-size=&#x27;42&#x27; font-family=&#x27;Arial&#x27;&gt;Nara Park&lt;/text&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;56%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;%23ffd7cf&#x27; font-size=&#x27;24&#x27; font-family=&#x27;Arial&#x27;&gt;Nara, Japan&lt;/text&gt;&lt;/svg&gt;`;">
+          <span class="city-badge">Nara</span>
+        </div>
+        <div class="place-info">
+          <div class="place-name">Nara Park</div>
+          <div class="place-desc">A large park famous for friendly deer, temples, and open green spaces.</div>
+          <div class="place-rating"><span class="stars">★★★★★</span><span class="rating-num">4.5 · 61,000+ reviews</span></div>
+          <div class="place-hours">Click anywhere on this card to open the place</div>
+          <div class="place-actions">
+            <a class="mini-btn" href="https://www.google.com/search?q=Nara+Park" target="_blank" onclick="event.stopPropagation()">Open place</a>
+            <a class="mini-btn secondary" href="https://www.booking.com/searchresults.html?ss=Nara%20Japan" target="_blank" onclick="event.stopPropagation()">Book nearby</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="place-card reveal" onclick="openPlace('Itsukushima Shrine','https://www.google.com/search?q=Itsukushima+Shrine')">
+      <div class="place-top">
+        <div class="place-img-wrap">
+          <img class="place-img" src="https://images.unsplash.com/photo-1565967511849-76a60a516170?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Itsukushima Shrine" onerror="this.onerror=null;this.src=`data:image/svg+xml;utf8,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;1200&#x27; height=&#x27;800&#x27;&gt;&lt;defs&gt;&lt;linearGradient id=&#x27;g&#x27; x1=&#x27;0&#x27; y1=&#x27;0&#x27; x2=&#x27;1&#x27; y2=&#x27;1&#x27;&gt;&lt;stop stop-color=&#x27;%237a1a1a&#x27; offset=&#x27;0&#x27;/&gt;&lt;stop stop-color=&#x27;%231a0a0a&#x27; offset=&#x27;1&#x27;/&gt;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;rect width=&#x27;100%&#x27; height=&#x27;100%&#x27; fill=&#x27;url(%23g)&#x27;/&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;44%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;white&#x27; font-size=&#x27;42&#x27; font-family=&#x27;Arial&#x27;&gt;Itsukushima Shrine&lt;/text&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;56%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;%23ffd7cf&#x27; font-size=&#x27;24&#x27; font-family=&#x27;Arial&#x27;&gt;Miyajima, Japan&lt;/text&gt;&lt;/svg&gt;`;">
+          <span class="city-badge">Miyajima</span>
+        </div>
+        <div class="place-info">
+          <div class="place-name">Itsukushima Shrine</div>
+          <div class="place-desc">A famous shrine with a floating torii gate rising from the water.</div>
+          <div class="place-rating"><span class="stars">★★★★★</span><span class="rating-num">4.6 · 34,000+ reviews</span></div>
+          <div class="place-hours">Click anywhere on this card to open the place</div>
+          <div class="place-actions">
+            <a class="mini-btn" href="https://www.google.com/search?q=Itsukushima+Shrine" target="_blank" onclick="event.stopPropagation()">Open place</a>
+            <a class="mini-btn secondary" href="https://www.booking.com/searchresults.html?ss=Miyajima%20Japan" target="_blank" onclick="event.stopPropagation()">Book nearby</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="place-card reveal" onclick="openPlace('Sapporo','https://www.google.com/search?q=Sapporo')">
+      <div class="place-top">
+        <div class="place-img-wrap">
+          <img class="place-img" src="https://images.unsplash.com/photo-1513407030348-c983a97b98d8?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Sapporo" onerror="this.onerror=null;this.src=`data:image/svg+xml;utf8,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;1200&#x27; height=&#x27;800&#x27;&gt;&lt;defs&gt;&lt;linearGradient id=&#x27;g&#x27; x1=&#x27;0&#x27; y1=&#x27;0&#x27; x2=&#x27;1&#x27; y2=&#x27;1&#x27;&gt;&lt;stop stop-color=&#x27;%237a1a1a&#x27; offset=&#x27;0&#x27;/&gt;&lt;stop stop-color=&#x27;%231a0a0a&#x27; offset=&#x27;1&#x27;/&gt;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;rect width=&#x27;100%&#x27; height=&#x27;100%&#x27; fill=&#x27;url(%23g)&#x27;/&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;44%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;white&#x27; font-size=&#x27;42&#x27; font-family=&#x27;Arial&#x27;&gt;Sapporo&lt;/text&gt;&lt;text x=&#x27;50%&#x27; y=&#x27;56%&#x27; dominant-baseline=&#x27;middle&#x27; text-anchor=&#x27;middle&#x27; fill=&#x27;%23ffd7cf&#x27; font-size=&#x27;24&#x27; font-family=&#x27;Arial&#x27;&gt;Hokkaido, Japan&lt;/text&gt;&lt;/svg&gt;`;">
+          <span class="city-badge">Hokkaido</span>
+        </div>
+        <div class="place-info">
+          <div class="place-name">Sapporo</div>
+          <div class="place-desc">A northern city known for snow, seafood, winter festivals, and wide streets.</div>
+          <div class="place-rating"><span class="stars">★★★★★</span><span class="rating-num">4.5 · 19,000+ reviews</span></div>
+          <div class="place-hours">Click anywhere on this card to open the place</div>
+          <div class="place-actions">
+            <a class="mini-btn" href="https://www.google.com/search?q=Sapporo" target="_blank" onclick="event.stopPropagation()">Open place</a>
+            <a class="mini-btn secondary" href="https://www.booking.com/searchresults.html?ss=Sapporo%20Japan" target="_blank" onclick="event.stopPropagation()">Book nearby</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="book-section reveal">
+    <div class="sec-label">✦ Plan your trip</div>
+    <div class="sec-title">Book a stay</div>
+    <div class="book-grid">
+      <div class="field-group"><span class="field-label">Destination</span>
+        <select id="dest">
+          <option>Tokyo</option><option>Kyoto</option><option>Osaka</option><option>Mount Fuji</option>
+          <option>Nara</option><option>Miyajima</option><option>Sapporo</option>
+        </select>
+      </div>
+      <div class="field-group"><span class="field-label">Check-in</span><input type="date" id="checkin"></div>
+      <div class="field-group"><span class="field-label">Check-out</span><input type="date" id="checkout"></div>
+      <div class="field-group"><span class="field-label">Guests</span>
+        <select id="guests"><option>1 guest</option><option>2 guests</option><option>3 guests</option><option>4+ guests</option></select>
+      </div>
+    </div>
+    <button class="book-btn" onclick="handleBook()">Search availability →</button>
+    <div class="confirm-msg" id="confirm-msg"></div>
+  </div>
+
+  <div class="footer-bar reveal">Made for Japan travel planning · 18 destinations included</div>
+</div>
+
+<script>
+const pc=document.getElementById('petals');
+for(let i=0;i<12;i++){
+  const p=document.createElement('span');
+  p.textContent='🌸';
+  p.style.cssText=`position:absolute;font-size:${12+Math.random()*10}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation:fall ${4+Math.random()*5}s ${Math.random()*5}s linear infinite;opacity:0;`;
+  pc.appendChild(p);
+}
+const observer=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      const num=e.target.querySelector('[data-target]');
+      if(num&&!num.dataset.done){num.dataset.done='1';animateCounter(num);}
+    }
+  });
+},{threshold:0.12});
+document.querySelectorAll('.reveal,.stat-card').forEach(el=>observer.observe(el));
+
+function animateCounter(el){
+  const target=parseInt(el.dataset.target);
+  const suffix=el.dataset.suffix||'';
+  const dur=1400,start=performance.now();
+  function step(now){
+    const p=Math.min((now-start)/dur,1);
+    const ease=1-Math.pow(1-p,3);
+    el.textContent=Math.round(ease*target)+(p>=1?suffix:'');
+    if(p<1)requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+function openPlace(name, url){ window.open(url, '_blank'); }
+function handleBook(){
+  const dest=document.getElementById('dest').value;
+  const guests=document.getElementById('guests').value;
+  const msg=document.getElementById('confirm-msg');
+  msg.style.display='block';
+  msg.textContent='✓ Searching stays in '+dest+' for '+guests+'...';
+  setTimeout(()=>window.open('https://www.booking.com/search.html?ss='+encodeURIComponent(dest+' Japan'),'_blank'),700);
+}
+const today=new Date();
+const fmt=d=>d.toISOString().split('T')[0];
+const next=new Date(today); next.setDate(today.getDate()+7);
+document.getElementById('checkin').value=fmt(today);
+document.getElementById('checkout').value=fmt(next);
+</script>
+</body>
+</html>
